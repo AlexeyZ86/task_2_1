@@ -1,0 +1,49 @@
+package lesson_2.q_1;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+
+
+public class TrainRunner {
+    public static void main(String[] args) {
+
+        try {
+            File file = new File("c:\\Trains.xml");
+            JAXBContext jaxbContext = JAXBContext.newInstance(Trains.class);
+
+            // читаем из файла
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            Trains trains = (Trains) unmarshaller.unmarshal(file);
+            System.out.println(trains);
+
+            DateUtil du = new DateUtil();
+            TimeUtil tu = new TimeUtil();
+
+            // добавляемм поезд
+            trains.add(new Train("Bakhmach", "Kiev", du.unmarshal("13.12.2016"), tu.unmarshal("16:04")));
+            trains.add(new Train("Kiev", "NewYork", du.unmarshal("14.12.2016"), tu.unmarshal("15:20")));
+
+            // пишем в файл
+            Marshaller marshaller = jaxbContext.createMarshaller();
+            // читабельное форматирование
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(trains, file);
+
+            //поиск поезда по времени
+            trains.find(tu.unmarshal("15:00"), tu.unmarshal("19:00"));
+            //поиск поезда по станции назначения
+            trains.find("Kiev");
+
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+}
