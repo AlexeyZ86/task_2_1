@@ -1,0 +1,25 @@
+package lesson_2.q_1;
+
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
+public class DateUtil extends XmlAdapter<String, Date> {
+    private DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+    @Override
+    public Date unmarshal(String v) throws Exception {
+        synchronized (dateFormat){
+            return dateFormat.parse(v);
+        }
+    }
+
+    @Override
+    public String marshal(Date v) throws Exception {
+        synchronized (dateFormat){
+        return dateFormat.format(v);
+        }
+    }
+}
