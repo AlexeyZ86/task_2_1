@@ -1,0 +1,67 @@
+package lesson_2.q_1;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+@XmlRootElement(name = "trains")
+public class Trains {
+    private String name;
+    @XmlElement(name = "train")
+    private List<Train> trains = new ArrayList<>();
+
+    private Trains() {
+    }
+
+    public Trains(String name) {
+        this.name = name;
+    }
+
+    public Trains(String name, List<Train> trains) {
+        this.name = name;
+        this.trains = trains;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void add(Train train){
+        trains.add(train);
+    }
+
+    public List<Train> find(Date from, Date to){
+        List<Train> result = new ArrayList<>();
+        for (Train train: trains){
+            if (train.getDeparture().after(from) && train.getDeparture().before(to)){
+             result.add(train);
+            }
+        }
+        System.out.println("Trains found: " + result);
+        return result;
+    }
+    public List<Train> find(String to){
+        List<Train> result = new ArrayList<>();
+        for (Train train: trains){
+            if (train.getTo().equals(to)){
+                result.add(train);
+            }
+        }
+        System.out.println("Trains to station " + to + " found: " + result);
+        return result;
+
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.deepToString(trains.toArray());
+    }
+
+}
